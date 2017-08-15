@@ -1,0 +1,89 @@
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <iomanip>
+
+using namespace std;
+
+void evenMedianCalc ( double & next, int & count,int & median, ifstream& in_stream)
+{
+    int position1,position2;
+    if (count/2 == 0){
+        position1 =( count/2);
+        position2 = position1 + 1;
+        count=0;
+        while (in_stream >> next){
+            in_stream >> next;
+            count++;
+            if (count == position1){
+                median = next;
+            cout << endl;
+            }
+            if (count == position2){
+                median += median;
+            cout << endl;
+            }
+        }
+    }
+}
+void oddMedianCalc ( double & next, int & count, int & median,ifstream& in_stream)
+{
+    int position1,position2;
+    if (!count/2 == 0){
+        position1 =((count+1)/2);
+        count=0;
+        while (in_stream >> next){
+            in_stream >> next;
+            count++;
+            if (count == position1){
+                median = next;
+            cout << endl;
+            }
+        }
+    }
+}
+void instreamErrorTest(ifstream& in_stream)
+{   if (in_stream.fail()){
+        cout << "Input file opening failed.\n";
+        exit(1);
+    }
+}
+void outstreamErrorTest(ofstream& out_stream){
+    if (out_stream.fail()){
+        cout << "Output file opening failed.\n";
+        exit(1);
+    }
+}
+/**This code is used to compute a median of a data file. The question requests
+that the programmer requests that the data is sorted (in increasing order.)
+We are requested to open the file,count the number of elements,close the file
+and calculate the position of the middle of the file, open the file again,
+count up to the entries you need and calculate the middle.**/
+int main(){
+    int median=0,count=0;
+    double next,sum=0;
+    ifstream in_stream;
+    ofstream out_stream;
+
+    in_stream.open("infile.dat");
+    instreamErrorTest(in_stream);
+    out_stream.open("outfile.dat");
+    outstreamErrorTest(out_stream);
+
+    while (in_stream >> next ){
+        in_stream >> next;
+        count++;
+    }
+    out_stream << "The amount of numbers in the list is:"<<endl;
+    in_stream.close();
+    out_stream.close();
+    in_stream.open("infile.dat");
+    instreamErrorTest(in_stream);
+    out_stream.open("outfile.dat");
+    outstreamErrorTest(out_stream);
+    evenMedianCalc (next,count,median,in_stream);
+    oddMedianCalc (next, count,median,in_stream);
+    in_stream.close();
+    out_stream.close();
+    return 0;
+}
